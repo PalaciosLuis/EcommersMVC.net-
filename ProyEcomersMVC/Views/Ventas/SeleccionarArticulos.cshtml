@@ -1,0 +1,56 @@
+﻿@model ProyEcomersMVC.Models.Articulos
+
+@{
+    ViewBag.Title = "SeleccionarArticulos";
+}
+
+<h2>SeleccionarArticulos</h2>
+
+<div>
+    <h4>Articulos</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.art_cod)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.art_cod)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.art_nom)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.art_nom)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.art_pre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.art_pre)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.art_stk)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.art_stk)
+        </dd>
+        <dt>Imagen</dt>
+        <dd>
+
+                <img src="@Url.Content("~/fotos_articulos/"+Model.art_cod+".jpg")"
+                     style="width:70px;height:70px" />
+       
+        </dd>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Agregar articulo", "AgregarArticulo", new { art_cod = Model.art_cod }) |
+    @Html.ActionLink("Back to List", "Listar_Articulos")
+</p>

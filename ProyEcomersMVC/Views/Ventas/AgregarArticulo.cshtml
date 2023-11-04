@@ -1,0 +1,26 @@
+﻿
+@{
+    ViewBag.Title = "AgregarArticulo";
+}
+
+<h2>AgregarArticulo</h2>
+<div class="alert alert-info">
+
+
+    @ViewBag.Mensaje
+</div>
+
+<div>
+    
+
+        <img src="@Url.Content("~/fotos_articulos/"+ViewBag.codigo+".jpg")"
+             style="width:70px;height:70px" />
+
+</div>
+<div>
+
+    @Html.ActionLink("Seguir comprando", "Listar_Articulos")
+    @Html.ActionLink("Mostrar carrito", "Mostrar_Carrito")
+
+</div>
+

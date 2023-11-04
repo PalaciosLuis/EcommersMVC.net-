@@ -1,0 +1,70 @@
+﻿@model IEnumerable<ProyEcomersMVC.Models.Articulos>
+
+@{
+    ViewBag.Title = "Listar_Articulos";
+}
+
+<h2>Listar_Articulos</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+@using(Html.BeginForm())
+  {
+
+    <div>
+        Nombre de articulo: @Html.TextBox("nom")
+        <button class="btn btn-primary">Consultar</button>
+    </div>
+
+  }
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.art_cod)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.art_nom)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.art_pre)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.art_stk)
+        </th>
+        <th>Imagen</th>
+
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.art_cod)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.art_nom)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.art_pre)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.art_stk)
+        </td>
+        <td>
+
+            <img src="@Url.Content("~/fotos_articulos/"+item.art_cod+".jpg")"
+                 style="width:70px;height:70px"/>
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Details", "SeleccionarArticulos", new { id=item.art_cod}) |
+            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+        </td>
+    </tr>
+    
+}
+
+</table>

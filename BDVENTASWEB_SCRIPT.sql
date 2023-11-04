@@ -1,0 +1,2469 @@
+-- ---------------------------------------
+-- Host      : (local)
+-- Database  : NEWBDVENTAS2018
+-- SCRIPT  DE  IMPLANTACION  DE  BD. MS SQL SERVER  
+-- CREACION DE BASE DE DATOS  (DATA y LOG)
+USE master
+go
+IF DB_ID('BDVENTASWEB') IS NOT NULL
+BEGIN
+	ALTER DATABASE BDVENTASWEB SET SINGLE_USER WITH ROLLBACK IMMEDIATE
+	DROP DATABASE BDVENTASWEB
+END
+GO
+
+CREATE DATABASE BDVENTASWEB
+COLLATE MODERN_SPANISH_CI_AI
+GO
+
+USE BDVENTASWEB
+GO
+
+SET LANGUAGE SPANISH
+GO
+SET NOCOUNT ON
+GO
+
+--
+-- Definition for table Articulos : 
+--
+
+CREATE TABLE [dbo].[Articulos] (
+  [art_cod] char(5) COLLATE Modern_Spanish_CI_AI NOT NULL,
+  [art_nom] varchar(50) COLLATE Modern_Spanish_CI_AI NULL,
+  [art_uni] char(4) COLLATE Modern_Spanish_CI_AI NULL,
+  [art_pre] decimal(8,2) NULL,
+  [art_stk] int NULL
+)
+ON [PRIMARY]
+GO
+
+--
+-- Definition for table Clientes : 
+--
+
+CREATE TABLE [dbo].[Clientes] (
+  [cli_cod] char(5) COLLATE Modern_Spanish_CI_AI NOT NULL,
+  [cli_nom] varchar(50) COLLATE Modern_Spanish_CI_AI NOT NULL,
+  [cli_tel] varchar(10) COLLATE Modern_Spanish_CI_AI NULL,
+  [cli_cor] varchar(40) COLLATE Modern_Spanish_CI_AI NULL,
+  [cli_dir] varchar(50) COLLATE Modern_Spanish_CI_AI NULL,
+  [cli_cre] money NULL
+)
+ON [PRIMARY]
+GO
+
+--
+-- Definition for table Fac_cabe : 
+--
+
+CREATE TABLE [dbo].[Venta_cab] (
+  [vta_num] int NOT NULL,
+  [vta_fec] datetime NOT NULL,
+  [cli_cod] char(5) COLLATE Modern_Spanish_CI_AI NOT NULL,
+  [vta_tipo] char(1) COLLATE Modern_Spanish_CI_AI NOT NULL,
+  [vta_igv] decimal(8,2) CONSTRAINT [DF_Fac_cabe_fac_igv] DEFAULT 0 NULL,
+  [ven_cod] int NOT NULL,
+  [vta_total] decimal(8,2) CONSTRAINT [DF_Fac_cabe_fac_total] DEFAULT 0 NULL
+)
+ON [PRIMARY]
+GO
+
+--
+-- Definition for table Fac_deta : 
+--
+
+CREATE TABLE [dbo].[Venta_det] (
+  [vta_num] int NOT NULL,
+  [art_cod] char(5) COLLATE Modern_Spanish_CI_AI NOT NULL,
+  [art_can] int NULL,
+  [art_pre] money NULL
+)
+ON [PRIMARY]
+GO
+
+--
+-- Definition for table Vendedor : 
+--
+
+CREATE TABLE [dbo].[Vendedor] (
+  [Ven_cod] int IDENTITY(1, 1) NOT NULL,
+  [Ven_nom] varchar(50) COLLATE Modern_Spanish_CI_AI NOT NULL,
+  [Ven_Fecing] datetime NULL
+)
+ON [PRIMARY]
+GO
+
+--
+-- Data for table dbo.Articulos  (LIMIT 0,500)
+--
+
+INSERT INTO Articulos VALUES ('A0001', N'MOUSE GENIOUS', N'UNI', 25, 35)
+INSERT INTO Articulos VALUES ('A0002', N'PENTIUM IV 1.8', N'UNI', 1550, 20)
+INSERT INTO Articulos VALUES ('A0003', N'PENTIUM IV 2.5', N'UNI', 2500, 30)
+INSERT INTO Articulos VALUES ('A0004', N'FUNDAS NAYLON', N'UNI', 25, 35)
+INSERT INTO Articulos VALUES ('A0005', N'MEMORIA USB 1GB', N'UNI', 20, 24)
+INSERT INTO Articulos VALUES ('A0006', N'TINTA BJC21 B/N', N'CAJA', 20, 25)
+INSERT INTO Articulos VALUES ('A0007', N'IMPRESORA EPSON TX1000', N'UNI', 355, 30)
+INSERT INTO Articulos VALUES ('A0008', N'MONITOR LCD LG 17', N'UNI', 380, 10)
+INSERT INTO Articulos VALUES ('A0009', N'MONITOR LCD SAMSUNG 19', N'UNI', 450, 12)
+INSERT INTO Articulos VALUES ('A0010', N'PENTIUM IV CORE 2 DUO', N'UNI', 2990, 7)
+INSERT INTO Articulos VALUES ('A0011', N'MOUSE MICROSOFT', N'UNI', 70, 32)
+INSERT INTO Articulos VALUES ('A0012', N'MEMORIA RAM 1GB KINGSTON', N'UNI', 90, 15)
+INSERT INTO Articulos VALUES ('A0013', N'MEMORIA RAM 2GB KINGSTON', N'UNI', 150, 25)
+INSERT INTO Articulos VALUES ('A0014', N'IMPRESORA CANON 1000', N'UNI', 205, 200)
+INSERT INTO Articulos VALUES ('A0015', N'IMPRESORA HP P1006 Laser Jet', N'UNI', 450, 20)
+INSERT INTO Articulos VALUES ('A0016', N'TINTA BJC25 NEGRA', N'CAJA', 15, 10)
+INSERT INTO Articulos VALUES ('A0017', N'TONER HP NEGRO', N'CAJA', 220, 12)
+INSERT INTO Articulos VALUES ('A0018', N'TONER HP COLOR', N'CAJA', 400, 10)
+INSERT INTO Articulos VALUES ('A0019', N'TECLADO EPSON 102', N'UNI', 75, 22)
+INSERT INTO Articulos VALUES ('A0020', N'MOUSE LOGITECH', N'UNI', 30, 19)
+INSERT INTO Articulos VALUES ('A0021', N'USB KINGSTON 16GB', N'UNI', 140, 15)
+INSERT INTO Articulos VALUES ('A0022', N'USB KINGSTON 8GB', N'UNI', 80, 20)
+INSERT INTO Articulos VALUES ('A0023', N'USB KINGSTON 4GB', N'UNI', 50, 25)
+INSERT INTO Articulos VALUES ('A0024', N'AMPLIFICADOR TRINITON', N'UNI', 100, 20)
+INSERT INTO Articulos VALUES ('A0025', N'PARLANTES DE 50 watss', N'UNI', 70, 12)
+INSERT INTO Articulos VALUES ('A0026', N'TECLADO MICRONICS 102', N'UNI', 55, 12)
+INSERT INTO Articulos VALUES ('A0027', N'MOUSE INALAMBRICO', N'UNI', 90, 10)
+INSERT INTO Articulos VALUES ('A0028', N'CD PRINCO X 50', N'CONO', 25, 10)
+INSERT INTO Articulos VALUES ('A0029', N'DVD PRINCO X 50', N'CONO', 30, 20)
+INSERT INTO Articulos VALUES ('A0030', N'SCANNER CODIGO DE BARRAS', N'UNI', 190, 10)
+INSERT INTO Articulos VALUES ('A0031', N'CD PRINCO X 100', N'CONO', 45, 10)
+INSERT INTO Articulos VALUES ('A0032', N'DVD PRINCO X 100', N'CONO', 55, 20)
+INSERT INTO Articulos VALUES ('A0033', N'LECTOR-QUEMADOR CD LG', N'UNI', 45, 10)
+INSERT INTO Articulos VALUES ('A0034', N'LECTOR-QUEMADOR DVD LG', N'UNI', 75, 20)
+GO
+
+--
+-- Data for table dbo.Clientes  (LIMIT 0,500)
+--
+
+INSERT INTO Clientes 
+VALUES 
+  ('C0001', N'Alvarez Peña, Angel', N'123-4567', N'malvarez@hotmail.com', N'Av. La Marina 1234', 3500)
+GO
+
+INSERT INTO Clientes 
+VALUES 
+  ('C0002', N'Ponte Gomez, Alejandro', N'658-4503', N'alexponte@yahoo.com', N'Av. Pardo 456', 2800)
+GO
+
+INSERT INTO Clientes 
+VALUES 
+  ('C0003', N'Zuñiga Mateo, Carlos', N'567-4566', NULL, N'Av. Principal 123', 1200)
+GO
+
+INSERT INTO Clientes 
+VALUES 
+  ('C0004', N'Tucto de Souza, Bernardo', N'567-4566', NULL, N'Av. Principal 123', 1200)
+GO
+
+INSERT INTO Clientes 
+VALUES 
+  ('C0005', N'Vilela Bustamante, Percy', NULL, N'obando@hotmail.com', N'Calle San Pedro 134', 600)
+GO
+
+INSERT INTO Clientes 
+VALUES 
+  ('C0006', N'Linares Ramos, Miguel', N'477-8410', N'mlinares@hotmail.com', N'Jr. Stravinsky 140', 1500)
+GO
+
+INSERT INTO Clientes 
+VALUES 
+  ('C0007', N'Montes Diaz, Miguel', N'567-8356', N'mmontesdiaz@hotmail.com', N'Jr. Naranjos 5689', 3100)
+GO
+
+INSERT INTO Clientes 
+VALUES 
+  ('C0008', N'Rojas Valverde, Julian', N'789-4568', N'jrvalverde@yahoo.com', N'Av. Habich 543', 2700)
+GO
+
+INSERT INTO Clientes 
+VALUES 
+  ('C0009', N'Garcia Moyoli, Guiliana', N'789-4073', N'ggarcia@yahoo.com', N'Av. Iquitos 228', 3400)
+GO
+
+INSERT INTO Clientes 
+VALUES 
+  ('C0010', N'Miranda La Torre, Kelly', N'565-0437', N'kmiranda@gmail.com', N'Calle Nueva 850', 700)
+GO
+
+INSERT INTO Clientes 
+VALUES 
+  ('C0011', N'Wong Atoccsa, Israel', N'768-5704', NULL, N'Calle Cueva 432', 800)
+GO
+
+INSERT INTO Clientes 
+VALUES 
+  ('C0012', N'Liñan Rosales, Fernando', NULL, N'flinan@hotmail.com', N'Av. Javier Prado 114', 600)
+GO
+
+INSERT INTO Clientes 
+VALUES 
+  ('C0013', N'Vergara Ruiz, Jose', N'567-8466', N'josevergara@hotmail.com', N'Jr. Pio XII 112', NULL)
+GO
+
+INSERT INTO Clientes 
+VALUES 
+  ('C0014', N'Bustamante Motta, Diego', N'567-4566', NULL, N'Av. Principal 123', 1200)
+GO
+
+INSERT INTO Clientes 
+VALUES 
+  ('C0015', N'Alvarado Cueva, Rosa', N'456-3457', N'campos@yahoo.com', N'Jr. Dominico 554', 5000)
+GO
+
+INSERT INTO Clientes 
+VALUES 
+  ('C0016', N'Antero Minaya, Gregorio', N'746-0647', N'amg@hotmail.com', N'Jr. Salavery 876', 2100)
+GO
+
+INSERT INTO Clientes 
+VALUES 
+  ('C0017', N'Diaz Mal Partida, Jose', N'567-4566', NULL, N'Av. Guardia Civil 123', 1200)
+GO
+
+INSERT INTO Clientes 
+VALUES 
+  ('C0018', N'Gutierrez Pazos, Mauricio', N'897-5783', N'mgutierrez@gmail.com', N'Av. Habich 4567', 800)
+GO
+
+INSERT INTO Clientes 
+VALUES 
+  ('C0019', N'Mendoza Ramirez, Esther', N'958-3569', N'emendozar@gmail.com', N'Av. Wilson 678', 2600)
+GO
+
+INSERT INTO Clientes 
+VALUES 
+  ('C0020', N'Salazar Santiago, Mario', N'654-6534', N'marioss@hotmail.com', N'Av. Pardo 567', 4100)
+GO
+
+INSERT INTO Clientes 
+VALUES 
+  ('C0021', N'Carrasco Lee, Laura', N'267-8958', N'lcarrasco@gmail.com', N'Av. Wilson 1267', 700)
+GO
+
+INSERT INTO Clientes 
+VALUES 
+  ('C0022', N'Rosas La Riva, Kelly', N'789-4073', N'kellyrosas@yahoo.com', N'Av. Iquitos 228', 400)
+GO
+
+INSERT INTO Clientes 
+VALUES 
+  ('C0023', N'Caceres Atoccsa, Carmen', N'768-5704', NULL, N'Calle Cueva 432', NULL)
+GO
+
+INSERT INTO Clientes 
+VALUES 
+  ('C0024', N'Sanchez Briceño, Carlos', NULL, N'csanchez@hotmail.com', N'Av. Javier Prado 114', 1600)
+GO
+
+INSERT INTO Clientes 
+VALUES 
+  ('C0025', N'Lagos Mendoza, Jose', N'567-8466', N'lagosjose@hotmail.com', N'Jr. Pio XII 112', NULL)
+GO
+
+INSERT INTO Clientes 
+VALUES 
+  ('C0026', N'Bustamante Porta, Diego', N'567-4566', NULL, N'Av. Principal 123', 1200)
+GO
+
+INSERT INTO Clientes 
+VALUES 
+  ('C0027', N'Meza Cuadra, Paola', N'456-3457', N'paolameza@gmail.com', N'Jr. Dominico 554', 2000)
+GO
+
+INSERT INTO Clientes 
+VALUES 
+  ('C0028', N'Portilla Flores, Julio', N'746-0647', N'julioportilla@gmail.com', N'Jr. Salavery 876', 2100)
+GO
+
+INSERT INTO Clientes 
+VALUES 
+  ('C0029', N'Quiroz Salvador, Jose', N'567-4566', NULL, N'Av. Guardia Civil 123', 1200)
+GO
+
+INSERT INTO Clientes 
+VALUES 
+  ('C0030', N'Sotelo Matos, Mauricio', N'897-5783', N'msotelo@yahoo.com', N'Av. Habich 4567', 800)
+GO
+
+INSERT INTO Clientes 
+VALUES 
+  ('C0031', N'Mendez Neyra, Vanessa', N'958-3569', N'vmendezn@yahoo.com', N'Av. Wilson 678', 2600)
+GO
+
+INSERT INTO Clientes 
+VALUES 
+  ('C0032', N'Inafuku Salazar, Elvira', N'654-6534', N'einafuku@hotmail.com', N'Av. Pardo 567', 4100)
+GO
+
+INSERT INTO Clientes 
+VALUES 
+  ('C0033', N'Martinez Chuquizuta, Cristina', N'267-8958', N'cristymar@hotmail.com', N'Av. Wilson 1267', 700)
+GO
+
+INSERT INTO Clientes 
+VALUES 
+  ('C0034', N'Salazar Montoya, Miguel', N'267-8958', N'msalazar@hotmail.com', N'Av. Uruguay 680', 1200)
+GO
+
+INSERT INTO Clientes 
+VALUES 
+  ('C0035', N'De la Cruz Sanabria, Enith', N'676-9751', N'edelacruz@hotmail.com', N'Av. Peru 3506', 900)
+GO
+
+INSERT INTO Clientes 
+VALUES 
+  ('C0036', N'Tarazona Chicmana, Pedro', N'728-1052', N'ptarazona@yahoo.com', N'Av. Wilson 1267', 700)
+GO
+
+--
+-- Data for table dbo.Fac_cabe  (LIMIT 0,500)
+--
+
+-- 2008
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10001', '20181002', N'C0007', N'F', 178.03, 1, 1115)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10002', '20181002', N'C0005', N'F', 466.22, 2, 2920)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10003', '20181003', N'C0016', N'B', 0, 2, 200)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10004', '20181008', N'C0002', N'F', 217.94, 1, 1365)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10005', '20181018', N'C0005', N'B', 0, 3, 5115)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10006', '20181019', N'C0002', N'B', 0, 4, 4615)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10007', '20181022', N'C0016', N'B', 0, 5, 690)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10008', '20181025', N'C0005', N'F', 9.58, 5, 60)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10009', '20181028', N'C0020', N'B', 0, 6, 50)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10010', '20181030', N'C0005', N'B', 0, 7, 830)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10011', '20181031', N'C0012', N'B', 0, 10, 3380)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10012', '20181102', N'C0012', N'F', 335.29, 7, 2100)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10013', '20181102', N'C0002', N'F', 687.35, 6, 4305)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10014', '20181104', N'C0011', N'F', 65.46, 11, 410)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10015', '20181106', N'C0018', N'B', 0, 12, 1065)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10016', '20181110', N'C0012', N'F', 81.43, 11, 510)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10017', '20181120', N'C0001', N'B', 0, 13, 390)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10018', '20181121', N'C0002', N'B', 0, 13, 1330)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10019', '20181124', N'C0001', N'F', 985.13, 14, 6170)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10020', '20181125', N'C0002', N'B', 0, 15, 8880)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10021', '20181125', N'C0003', N'F', 973.15, 16, 6095)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10022', '20181127', N'C0004', N'B', 0, 17, 100)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10023', '20181128', N'C0005', N'F', 142.1, 19, 890)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10024', '20181128', N'C0004', N'B', 0, 19, 6865)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10025', '20181130', N'C0005', N'F', 526.89, 11, 3300)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10026', '20181130', N'C0004', N'B', 0, 14, 1030)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10027', '20181130', N'C0005', N'B', 0, 1, 200)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10028', '20181202', N'C0004', N'F', 9.58, 10, 60)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10029', '20181205', N'C0005', N'B', 0, 4, 1200)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10030', '20181205', N'C0006', N'F', 215.55, 3, 1350)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10031', '20181210', N'C0004', N'B', 0, 4, 100)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10032', '20181212', N'C0007', N'B', 0, 8, 660)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10033', '20181215', N'C0008', N'F', 122.14, 7, 765)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10034', '20181215', N'C0008', N'B', 0, 6, 300)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10035', '20181218', N'C0004', N'B', 0, 7, 270)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10036', '20181220', N'C0009', N'F', 15.97, 4, 100)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10037', '20181220', N'C0010', N'B', 0, 11, 900)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10038', '20181220', N'C0010', N'B', 0, 11, 125)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10039', '20181222', N'C0015', N'F', 69.45, 9, 435)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10040', '20181222', N'C0014', N'B', 0, 1, 130)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10041', '20181222', N'C0005', N'F', 57.48, 3, 360)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10042', '20181223', N'C0011', N'B', 0, 6, 760)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10043', '20181223', N'C0014', N'F', 70.25, 11, 440)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10044', '20181223', N'C0012', N'B', 0, 12, 270)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10045', '20181223', N'C0007', N'B', 0, 4, 410)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10046', '20181227', N'C0008', N'F', 14.37, 4, 90)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10047', '20181227', N'C0009', N'B', 0, 3, 1195)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10048', '20181227', N'C0011', N'F', 6.39, 7, 40)
+GO
+
+-- AÑO 2009 
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10049', '20190104', N'C0019', N'F', 113.36, 8, 710)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10050', '20190107', N'C0004', N'F', 81.43, 2, 510)
+GO
+
+
+----------------------------------------------------------
+-- NUEVO --
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10051', '20190110', N'C0002', N'F', 178.03, 1, 1115)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10052', '20190110', N'C0015', N'F', 466.22, 2, 2920)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10053', '20190115', N'C0021', N'B', 0, 2, 200)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10054', '20190118', N'C0022', N'F', 217.94, 1, 1365)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10055', '20190121', N'C0008', N'B', 0, 3, 5115)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10056', '20190124', N'C0012', N'B', 0, 4, 4615)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10057', '20190126', N'C0010', N'B', 0, 5, 690)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10058', '20190130', N'C0020', N'F', 9.58, 5, 60)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10059', '20190130', N'C0030', N'B', 0, 6, 50)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10060', '20190210', N'C0035', N'B', 0, 7, 830)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10061', '20190215', N'C0032', N'B', 0, 10, 3380)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10062', '20190218', N'C0022', N'F', 335.29, 7, 2100)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10063', '20190220', N'C0001', N'F', 687.35, 6, 4305)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10064', '20190221', N'C0013', N'F', 65.46, 11, 410)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10065', '20190224', N'C0019', N'B', 0, 12, 1065)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10066', '20190226', N'C0022', N'F', 81.43, 11, 510)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10067', '20190227', N'C0010', N'B', 0, 13, 390)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10068', '20190227', N'C0026', N'B', 0, 13, 1330)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10069', '20190228', N'C0008', N'F', 985.13, 14, 6170)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10070', '20190305', N'C0021', N'B', 0, 15, 8880)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10071', '20190307', N'C0030', N'F', 973.15, 16, 6095)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10072', '20190310', N'C0034', N'B', 0, 17, 100)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10073', '20190310', N'C0015', N'F', 142.1, 19, 890)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10074', '20190312', N'C0024', N'B', 0, 19, 6865)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10075', '20190315', N'C0014', N'F', 526.89, 11, 3300)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10076', '20190315', N'C0009', N'B', 0, 14, 1030)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10077', '20190318', N'C0013', N'B', 0, 1, 200)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10078', '20190320', N'C0034', N'F', 9.58, 10, 60)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10079', '20190322', N'C0015', N'B', 0, 4, 1200)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10080', '20190325', N'C0036', N'F', 215.55, 3, 1350)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10081', '20190328', N'C0005', N'B', 0, 4, 100)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10082', '20190330', N'C0008', N'B', 0, 8, 660)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10083', '20190331', N'C0010', N'F', 122.14, 7, 765)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10084', '20190402', N'C0003', N'B', 0, 6, 300)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10085', '20190405', N'C0007', N'B', 0, 7, 270)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10086', '20190408', N'C0019', N'F', 15.97, 4, 100)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10087', '20190410', N'C0020', N'B', 0, 11, 900)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10088', '20190410', N'C0018', N'B', 0, 11, 125)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10089', '20190416', N'C0025', N'F', 69.45, 9, 435)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10090', '20190420', N'C0017', N'B', 0, 1, 130)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10091', '20190423', N'C0035', N'F', 57.48, 3, 360)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10092', '20190425', N'C0016', N'B', 0, 6, 760)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10093', '20190428', N'C0024', N'F', 70.25, 11, 440)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10094', '20190428', N'C0014', N'B', 0, 12, 270)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10095', '20190430', N'C0017', N'B', 0, 4, 410)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10096', '20190430', N'C0028', N'F', 14.37, 4, 90)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10097', '20190430', N'C0030', N'B', 0, 3, 1195)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10098', '20190503', N'C0021', N'F', 6.39, 7, 40)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10099', '20190509', N'C0029', N'F', 113.36, 8, 710)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10100', '20190509', N'C0014', N'F', 81.43, 2, 510)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10101', '20190512', N'C0002', N'F', 178.03, 1, 1115)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10102', '20190515', N'C0003', N'F', 466.22, 2, 2920)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10103', '20190519', N'C0006', N'B', 0, 2, 200)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10104', '20190520', N'C0008', N'F', 217.94, 1, 1365)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10105', '20190520', N'C0012', N'B', 0, 3, 5115)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10106', '20190522', N'C0007', N'B', 0, 4, 4615)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10107', '20190524', N'C0009', N'B', 0, 5, 690)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10108', '20190525', N'C0015', N'F', 9.58, 5, 60)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10109', '20190528', N'C0023', N'B', 0, 6, 50)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10110', '20190529', N'C0035', N'B', 0, 7, 830)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10111', '20190529', N'C0032', N'B', 0, 10, 3380)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10112', '20190530', N'C0022', N'F', 335.29, 7, 2100)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10113', '20190530', N'C0014', N'F', 687.35, 6, 4305)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10114', '20190531', N'C0017', N'F', 65.46, 11, 410)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10115', '20190602', N'C0008', N'B', 0, 12, 1065)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10116', '20190604', N'C0011', N'F', 81.43, 11, 510)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10117', '20190610', N'C0005', N'B', 0, 13, 390)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10118', '20190612', N'C0001', N'B', 0, 13, 1330)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10119', '20190614', N'C0010', N'F', 985.13, 14, 6170)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10120', '20190615', N'C0020', N'B', 0, 15, 8880)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10121', '20190619', N'C0030', N'F', 973.15, 16, 6095)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10122', '20190622', N'C0029', N'B', 0, 17, 100)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10123', '20190624', N'C0004', N'F', 142.1, 19, 890)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10124', '20190625', N'C0027', N'B', 0, 19, 6865)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10125', '20190628', N'C0021', N'F', 526.89, 11, 3300)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10126', '20190628', N'C0014', N'B', 0, 14, 1030)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10127', '20190630', N'C0005', N'B', 0, 1, 200)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10128', '20190630', N'C0014', N'F', 9.58, 10, 60)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10129', '20190630', N'C0025', N'B', 0, 4, 1200)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10130', '20190630', N'C0036', N'F', 215.55, 3, 1350)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10131', '20190702', N'C0002', N'B', 0, 4, 100)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10132', '20190703', N'C0017', N'B', 0, 8, 660)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10133', '20190707', N'C0028', N'F', 122.14, 7, 765)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10134', '20190709', N'C0018', N'B', 0, 6, 300)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10135', '20190710', N'C0024', N'B', 0, 7, 270)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10136', '20190713', N'C0019', N'F', 15.97, 4, 100)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10137', '20190713', N'C0030', N'B', 0, 11, 900)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10138', '20190715', N'C0031', N'B', 0, 11, 125)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10139', '20190717', N'C0034', N'F', 69.45, 9, 435)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10140', '20190718', N'C0004', N'B', 0, 1, 130)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10141', '20190720', N'C0015', N'F', 57.48, 3, 360)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10142', '20190722', N'C0021', N'B', 0, 6, 760)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10143', '20190724', N'C0034', N'F', 70.25, 11, 440)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10144', '20190724', N'C0022', N'B', 0, 12, 270)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10145', '20190727', N'C0017', N'B', 0, 4, 410)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10146', '20190727', N'C0028', N'F', 14.37, 4, 90)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10147', '20190730', N'C0005', N'B', 0, 3, 1195)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10148', '20190730', N'C0001', N'F', 6.39, 7, 40)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10149', '20190731', N'C0009', N'F', 113.36, 8, 710)
+GO
+
+INSERT INTO Venta_Cab 
+VALUES 
+  ('10150', '20190731', N'C0003', N'F', 81.43, 2, 510)
+GO
+
+
+------ HASTA AQUI 02 -------------------
+
+--
+-- Data for table dbo.Fac_deta  (LIMIT 0,500)
+--
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10001', N'A0001', 2, 25)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10001', N'A0007', 3, 355)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10002', N'A0002', 16, 150)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10002', N'A0004', 4, 40)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10002', N'A0005', 6, 60)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10003', N'A0004', 5, 40)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10004', N'A0002', 2, 150)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10004', N'A0007', 3, 355)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10005', N'A0006', 12, 20)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10005', N'A0010', 11, 220)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10005', N'A0011', 4, 50)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10005', N'A0014', 11, 205)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10006', N'A0007', 13, 355)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10007', N'A0020', 23, 30)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10008', N'A0020', 2, 30)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10009', N'A0001', 2, 25)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10010', N'A0005', 7, 60)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10010', N'A0006', 8, 20)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10010', N'A0011', 5, 50)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10011', N'A0004', 4, 40)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10011', N'A0005', 6, 60)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10011', N'A0010', 13, 220)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10012', N'A0002', 14, 150)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10013', N'A0014', 21, 205)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10014', N'A0014', 2, 205)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10015', N'A0007', 3, 355)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10016', N'A0006', 5, 20)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10016', N'A0014', 2, 205)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10017', N'A0006', 7, 20)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10017', N'A0011', 5, 50)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10018', N'A0002', 1, 150)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10018', N'A0004', 4, 40)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10018', N'A0005', 11, 60)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10018', N'A0012', 4, 90)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10019', N'A0006', 7, 20)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10019', N'A0007', 6, 355)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10019', N'A0008', 13, 300)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10020', N'A0007', 6, 355)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10020', N'A0009', 15, 450)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10021', N'A0004', 2, 40)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10021', N'A0007', 3, 355)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10021', N'A0009', 11, 450)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10022', N'A0001', 4, 25)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10023', N'A0003', 5, 150)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10023', N'A0006', 7, 20)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10024', N'A0003', 15, 150)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10024', N'A0007', 13, 355)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10025', N'A0008', 11, 300)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10026', N'A0010', 4, 220)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10026', N'A0011', 3, 50)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10027', N'A0001', 2, 25)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10027', N'A0003', 1, 150)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10028', N'A0006', 3, 20)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10029', N'A0008', 4, 300)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10030', N'A0009', 3, 450)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10031', N'A0011', 2, 50)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10032', N'A0010', 3, 220)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10033', N'A0013', 1, 150)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10033', N'A0014', 3, 205)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10034', N'A0013', 2, 150)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10035', N'A0012', 3, 90)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10036', N'A0001', 4, 25)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10037', N'A0003', 6, 150)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10038', N'A0001', 5, 25)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10039', N'A0004', 2, 40)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10039', N'A0007', 1, 355)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10040', N'A0001', 2, 25)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10040', N'A0004', 2, 40)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10041', N'A0005', 6, 60)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10042', N'A0007', 2, 355)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10042', N'A0011', 1, 50)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10043', N'A0010', 2, 220)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10044', N'A0012', 3, 90)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10045', N'A0014', 2, 205)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10046', N'A0012', 1, 90)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10047', N'A0001', 2, 25)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10047', N'A0004', 2, 40)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10047', N'A0007', 3, 355)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10048', N'A0004', 1, 40)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10049', N'A0007', 2, 355)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10050', N'A0011', 3, 50)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10050', N'A0012', 4, 90)
+GO
+
+--------------------------------------------------------
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10051', N'A0001', 2, 25)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10051', N'A0007', 3, 355)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10052', N'A0002', 16, 150)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10052', N'A0004', 4, 40)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10052', N'A0005', 6, 60)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10053', N'A0004', 5, 40)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10054', N'A0002', 2, 150)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10054', N'A0007', 3, 355)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10055', N'A0006', 12, 20)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10055', N'A0010', 11, 220)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10055', N'A0011', 4, 50)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10055', N'A0014', 11, 205)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10056', N'A0007', 13, 355)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10057', N'A0020', 23, 30)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10058', N'A0020', 2, 30)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10059', N'A0001', 2, 25)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10060', N'A0005', 7, 60)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10060', N'A0006', 8, 20)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10060', N'A0011', 5, 50)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10061', N'A0004', 4, 40)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10061', N'A0005', 6, 60)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10061', N'A0010', 13, 220)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10062', N'A0002', 14, 150)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10063', N'A0014', 21, 205)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10064', N'A0014', 2, 205)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10065', N'A0007', 3, 355)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10066', N'A0006', 5, 20)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10066', N'A0014', 2, 205)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10067', N'A0006', 7, 20)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10067', N'A0011', 5, 50)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10068', N'A0002', 1, 150)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10068', N'A0004', 4, 40)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10068', N'A0005', 11, 60)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10068', N'A0012', 4, 90)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10069', N'A0006', 7, 20)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10069', N'A0007', 6, 355)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10069', N'A0008', 13, 300)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10070', N'A0007', 6, 355)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10070', N'A0009', 15, 450)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10071', N'A0004', 2, 40)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10071', N'A0007', 3, 355)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10071', N'A0009', 11, 450)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10072', N'A0001', 4, 25)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10073', N'A0003', 5, 150)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10073', N'A0006', 7, 20)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10074', N'A0003', 15, 150)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10074', N'A0007', 13, 355)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10075', N'A0008', 11, 300)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10076', N'A0010', 4, 220)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10076', N'A0011', 3, 50)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10077', N'A0001', 2, 25)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10077', N'A0003', 1, 150)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10078', N'A0006', 3, 20)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10079', N'A0008', 4, 300)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10080', N'A0009', 3, 450)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10081', N'A0011', 2, 50)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10082', N'A0010', 3, 220)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10083', N'A0013', 1, 150)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10083', N'A0014', 3, 205)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10084', N'A0013', 2, 150)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10085', N'A0012', 3, 90)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10086', N'A0001', 4, 25)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10087', N'A0003', 6, 150)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10088', N'A0001', 5, 25)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10089', N'A0004', 2, 40)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10089', N'A0007', 1, 355)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10090', N'A0001', 2, 25)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10090', N'A0004', 2, 40)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10091', N'A0005', 6, 60)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10092', N'A0007', 2, 355)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10092', N'A0011', 1, 50)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10093', N'A0010', 2, 220)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10094', N'A0012', 3, 90)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10095', N'A0014', 2, 205)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10096', N'A0012', 1, 90)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10097', N'A0001', 2, 25)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10097', N'A0004', 2, 40)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10097', N'A0007', 3, 355)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10098', N'A0004', 1, 40)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10099', N'A0007', 2, 355)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10100', N'A0011', 3, 50)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10100', N'A0012', 4, 90)
+GO
+
+----- DE LA 101 A 150 ------------------
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10101', N'A0001', 2, 25)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10101', N'A0007', 3, 355)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10102', N'A0002', 16, 150)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10102', N'A0004', 4, 40)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10102', N'A0005', 6, 60)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10103', N'A0004', 5, 40)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10104', N'A0002', 2, 150)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10104', N'A0007', 3, 355)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10105', N'A0006', 12, 20)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10105', N'A0010', 11, 220)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10105', N'A0011', 4, 50)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10105', N'A0014', 11, 205)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10106', N'A0007', 13, 355)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10107', N'A0020', 23, 30)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10108', N'A0020', 2, 30)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10109', N'A0001', 2, 25)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10110', N'A0005', 7, 60)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10110', N'A0006', 8, 20)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10110', N'A0011', 5, 50)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10111', N'A0004', 4, 40)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10111', N'A0005', 6, 60)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10111', N'A0010', 13, 220)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10112', N'A0002', 14, 150)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10113', N'A0014', 21, 205)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10114', N'A0014', 2, 205)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10115', N'A0007', 3, 355)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10116', N'A0006', 5, 20)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10116', N'A0014', 2, 205)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10117', N'A0006', 7, 20)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10117', N'A0011', 5, 50)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10118', N'A0002', 1, 150)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10118', N'A0004', 4, 40)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10118', N'A0005', 11, 60)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10118', N'A0012', 4, 90)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10119', N'A0006', 7, 20)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10119', N'A0007', 6, 355)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10119', N'A0008', 13, 300)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10120', N'A0007', 6, 355)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10120', N'A0009', 15, 450)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10121', N'A0004', 2, 40)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10121', N'A0007', 3, 355)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10121', N'A0009', 11, 450)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10122', N'A0001', 4, 25)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10123', N'A0003', 5, 150)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10123', N'A0006', 7, 20)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10124', N'A0003', 15, 150)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10124', N'A0007', 13, 355)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10125', N'A0008', 11, 300)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10126', N'A0010', 4, 220)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10126', N'A0011', 3, 50)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10127', N'A0001', 2, 25)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10127', N'A0003', 1, 150)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10128', N'A0006', 3, 20)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10129', N'A0008', 4, 300)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10130', N'A0009', 3, 450)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10131', N'A0011', 2, 50)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10132', N'A0010', 3, 220)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10133', N'A0013', 1, 150)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10133', N'A0014', 3, 205)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10134', N'A0013', 2, 150)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10135', N'A0012', 3, 90)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10136', N'A0001', 4, 25)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10137', N'A0003', 6, 150)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10138', N'A0001', 5, 25)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10139', N'A0004', 2, 40)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10139', N'A0007', 1, 355)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10140', N'A0001', 2, 25)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10140', N'A0004', 2, 40)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10141', N'A0005', 6, 60)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10142', N'A0007', 2, 355)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10142', N'A0011', 1, 50)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10143', N'A0010', 2, 220)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10144', N'A0012', 3, 90)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10145', N'A0014', 2, 205)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10146', N'A0012', 1, 90)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10147', N'A0001', 2, 25)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10147', N'A0004', 2, 40)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10147', N'A0007', 3, 355)
+GO
+
+INSERT INTO Venta_Det 
+VALUES 
+  ('10148', N'A0004', 1, 40)
+GO
+
+INSERT INTO Venta_Det VALUES ('10149', N'A0007', 2, 355)
+INSERT INTO Venta_Det VALUES ('10150', N'A0011', 3, 50)
+INSERT INTO Venta_Det VALUES ('10150', N'A0012', 4, 90)
+GO
+
+--
+-- Data for table dbo.Vendedor  (LIMIT 0,500)
+--
+
+SET IDENTITY_INSERT Vendedor ON
+GO
+
+INSERT INTO Vendedor(ven_cod, ven_nom, Ven_Fecing) VALUES (1, N'Diaz Vera, Ana', '19780312')
+INSERT INTO Vendedor(ven_cod, ven_nom, Ven_Fecing) VALUES (2, N'Pardo Campos, Carlos', '19790511')
+INSERT INTO Vendedor(ven_cod, ven_nom, Ven_Fecing) VALUES (3, N'Linares Moreno,  Claudia', '19790612')
+INSERT INTO Vendedor(ven_cod, ven_nom, Ven_Fecing) VALUES (4, N'Mendoza Obando, Maria', '19820411')
+INSERT INTO Vendedor(ven_cod, ven_nom, Ven_Fecing) VALUES (5, N'Narvaez Gomez, Juan Carlos', '19830615')
+INSERT INTO Vendedor(ven_cod, ven_nom, Ven_Fecing) VALUES (6, N'Murillo Mancini, Julio', '19850511')
+INSERT INTO Vendedor(ven_cod, ven_nom, Ven_Fecing) VALUES (7, N'Gonzales Vera, Erlinda', '19980412')
+INSERT INTO Vendedor(ven_cod, ven_nom, Ven_Fecing) VALUES (8, N'Rosales Mendez, Paola', '19941011')
+INSERT INTO Vendedor(ven_cod, ven_nom, Ven_Fecing) VALUES (9, N'Carrasco Lopez, Elvira', '19961011')
+INSERT INTO Vendedor(ven_cod, ven_nom, Ven_Fecing) VALUES (10, N'Diaz Bacilio, Eva', '19961011')
+GO
+
+INSERT INTO Vendedor(ven_cod, ven_nom, Ven_Fecing) 
+VALUES 
+  (11, N'Diaz Choque, Susy', '19981211')
+GO
+
+INSERT INTO Vendedor(ven_cod, ven_nom, Ven_Fecing) 
+VALUES 
+  (12, N'Huamani Rios, Liz', '19981111')
+GO
+
+INSERT INTO Vendedor(ven_cod, ven_nom, Ven_Fecing) 
+VALUES 
+  (13, N'Colmenares Peralta, Ana', '19990210')
+GO
+
+INSERT INTO Vendedor(ven_cod, ven_nom, Ven_Fecing) 
+VALUES 
+  (14, N'Campos Diaz, Juan', '19991112')
+GO
+
+INSERT INTO Vendedor(ven_cod, ven_nom, Ven_Fecing) 
+VALUES 
+  (15, N'Ramirez Cristobal, Pedro', '20001113')
+GO
+
+INSERT INTO Vendedor(ven_cod, ven_nom, Ven_Fecing) 
+VALUES 
+  (16, N'Camarena Rios, Daniel', '20000312')
+GO
+
+INSERT INTO Vendedor(ven_cod, ven_nom, Ven_Fecing) 
+VALUES 
+  (17, N'Porras Becerra, Jenny', '20001011')
+GO
+
+INSERT INTO Vendedor(ven_cod, ven_nom, Ven_Fecing) 
+VALUES 
+  (18, N'Zamora Contreras, Flor', '20011011')
+GO
+
+INSERT INTO Vendedor(ven_cod, ven_nom, Ven_Fecing) 
+VALUES 
+  (19, N'Perez Diaz, Miguel', '20011111')
+GO
+
+INSERT INTO Vendedor(ven_cod, ven_nom, Ven_Fecing) 
+VALUES 
+  (20, N'Inga Lopez, Consuelo', '20011212')
+GO
+
+INSERT INTO Vendedor(ven_cod, ven_nom, Ven_Fecing) 
+VALUES 
+  (21, N'Cardenas Bacilio, Fernando', '20021011')
+GO
+
+INSERT INTO Vendedor(ven_cod, ven_nom, Ven_Fecing) 
+VALUES 
+  (99, N'Ventas por Internet', '20190101')
+GO
+
+SET IDENTITY_INSERT [dbo].[Vendedor] OFF
+GO
+
+--
+-- Definition for checks : 
+--
+
+ALTER TABLE [dbo].[Clientes]
+ADD CHECK ([cli_cod] like 'C[0-9][0-9][0-9][0-9]')
+GO
+
+ALTER TABLE [dbo].[Venta_cab]
+ADD CHECK ([vta_tipo]='B' OR [vta_tipo]='F')
+GO
+
+--
+-- Definition for indices : 
+--
+
+ALTER TABLE [dbo].[Articulos]
+ADD CONSTRAINT PK_ARTICULOS PRIMARY KEY CLUSTERED ([art_cod])
+GO
+
+ALTER TABLE [dbo].[Clientes]
+ADD CONSTRAINT PK_CLIENTES PRIMARY KEY CLUSTERED ([cli_cod])
+GO
+
+ALTER TABLE [dbo].[Venta_cab]
+ADD CONSTRAINT PK_VENTA_CAB PRIMARY KEY CLUSTERED ([vta_num])
+GO
+
+ALTER TABLE [dbo].[Venta_det]
+ADD CONSTRAINT PK_VENTA_DET PRIMARY KEY CLUSTERED ([vta_num], [art_cod])
+GO
+
+ALTER TABLE [dbo].[Vendedor]
+ADD CONSTRAINT PK_VENDEDOR PRIMARY KEY CLUSTERED ([Ven_cod])
+GO
+
+--
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID('[dbo].[FK_Fac_cabe_Clientes]') AND parent_object_id = OBJECT_ID('[dbo].[Venta_cab]'))
+ALTER TABLE [dbo].[Venta_cab]  WITH CHECK ADD  CONSTRAINT [FK_Fac_cabe_Clientes] FOREIGN KEY([cli_cod])
+REFERENCES [dbo].[Clientes] ([cli_cod])
+GO
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID('[dbo].[FK_Fac_cabe_Vendedor]') AND parent_object_id = OBJECT_ID('[dbo].[Venta_cab]'))
+ALTER TABLE [dbo].[Venta_cab]  WITH CHECK ADD  CONSTRAINT [FK_Fac_cabe_Vendedor] FOREIGN KEY([ven_cod])
+REFERENCES [dbo].[Vendedor] ([Ven_cod])
+GO
+IF NOT EXISTS (SELECT * FROM sys.check_constraints WHERE object_id = OBJECT_ID('[dbo].[CK__Fac_cabe__fac_ti__03317E3D]') AND parent_object_id = OBJECT_ID('[dbo].[Venta_cab]'))
+ALTER TABLE [dbo].[Venta_cab]  WITH CHECK ADD CHECK  (([vta_tipo]='B' OR [vta_tipo]='F'))
+GO
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID('[dbo].[FK_Fac_deta_Articulos]') AND parent_object_id = OBJECT_ID('[dbo].[Venta_det]'))
+ALTER TABLE [dbo].[Venta_det]  WITH CHECK ADD  CONSTRAINT [FK_Fac_deta_Articulos] FOREIGN KEY([art_cod])
+REFERENCES [dbo].[Articulos] ([art_cod])
+GO
+IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID('[dbo].[FK_Fac_deta_Fac_cabe]') AND parent_object_id = OBJECT_ID('[dbo].[Venta_det]'))
+ALTER TABLE [dbo].[Venta_det]  WITH CHECK ADD  CONSTRAINT [FK_Fac_deta_Fac_cabe] FOREIGN KEY([vta_num])
+REFERENCES [dbo].[Venta_cab] ([vta_num])
+GO
+
+/*
+-- Comprobar el Tamaño de las Tablas creadas
+EXEC SP_SPACEUSED
+EXEC SP_SPACEUSED 'CLIENTES'
+EXEC SP_SPACEUSED 'ARTICULOS'
+EXEC SP_SPACEUSED 'FAC_CABE'
+EXEC SP_SPACEUSED 'FAC_DETA'
+EXEC SP_SPACEUSED 'VENDEDOR'
+GO
+*/
+
+SET NOCOUNT OFF
+GO
+
+SELECT 'BASE DE DATOS BDVENTASWEB CREADA CORRECTAMENTE' AS MENSAJE
+GO
+
+PRINT 'BASE DE DATOS BDVENTASWEB CREADA CORRECTAMENTE'
+GO
